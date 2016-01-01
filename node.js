@@ -30,32 +30,30 @@ var client = new Twitter({
   access_token_secret: '7tEI2kuSNlBRvMgYsbXtinKSjfyV6w7TahoV4aNdmD2pN'
 });
 
-// var params = {screen_name: 'nodejs'};
-// client.get('statuses/user_timeline', params, function(error, tweets, response){
-//   if (!error) {
-//     console.log(tweets);
-//   }
-// });
-
-client.get('search/tweets', {q: 'node.js'}, function(error, tweets, response){
-           // console.log(tweets);
-           for(var i=0; i<tweets.statuses.length; i++){
-                console.log(tweets.statuses[i].created_at, tweets.statuses[i].text, tweets.statuses[i].user.name, tweets.statuses[i].user.url, tweets.statuses[i].user.profile_image_url)
-           }
-        });
-
 app.get('/', function (req, res) {
+    var recordDisplay = [];
+    if(req.query.q != undefined){
+        console.log("Query: " + req.query.q)
 
-    if(req.query.query != undefined){
-        console.log("Query: " + req.query.query)
-
+        client.get('search/tweets', {q: req.query.q}, function(error, tweets, response){
+        for(var i=0; i<tweets.statuses.length; i++){
+          recordDisplay.push({
+            id: tweets.statuses[i].id, 
+            created_at: tweets.statuses[i].created_at, 
+            text: tweets.statuses[i].text, 
+            name: tweets.statuses[i].user.name, 
+            url: tweets.statuses[i].user.url, 
+            profile_image_url: tweets.statuses[i].user.profile_image_url
+          });
+        }
         
-
         res.writeHead(200, {
             'content-type': 'text/json'
         });
-        res.write("hahahs")
-        res.end('\n')
+        res.write(JSON.stringify(recordDisplay))
+        res.end('\n')        
+      });        
+
     }else{
         console.log('nope')
         res.writeHead(200, {
