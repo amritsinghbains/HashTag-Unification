@@ -72,24 +72,29 @@ app.get('/profile', function (req, res) {
         var params = {screen_name: req.query.q};
           client.get('statuses/user_timeline', params, function(error, tweets, response){
             if (!error) {
-              // console.log(tweets[0]);
+              console.log(tweets[0]);
 
               for(var i=0; i<tweets.length; i++){
-          recordDisplay.push({
-            id: tweets[i].id, 
-            created_at: tweets[i].created_at, 
-            text: tweets[i].text, 
-            name: tweets[i].user.name, 
-            url: tweets[i].user.url, 
-            profile_image_url: tweets[i].user.profile_image_url 
-          });
-        }
+                recordDisplay.push({
+                  id: tweets[i].id, 
+                  created_at: tweets[i].created_at, 
+                  text: tweets[i].text, 
+                  name: tweets[i].user.name, 
+                  url: tweets[i].user.url, 
+                  profile_image_url: tweets[i].user.profile_image_url,
+                  location: tweets[i].user.location,
+                  followers_count: tweets[i].user.followers_count,
+                  friends_count: tweets[i].user.friends_count,
+                  description: tweets[i].user.description,
+                  screen_name: tweets[i].user.screen_name
+                });
+              }
         
-        res.writeHead(200, {
-            'content-type': 'text/json'
-        });
-        res.write(JSON.stringify(recordDisplay))
-        res.end('\n');
+              res.writeHead(200, {
+                  'content-type': 'text/json'
+              });
+              res.write(JSON.stringify(recordDisplay))
+              res.end('\n');
 
             }
           });      
