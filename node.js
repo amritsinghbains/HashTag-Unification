@@ -63,3 +63,55 @@ app.get('/', function (req, res) {
         res.end('\n')
     }
 });
+
+app.get('/profile', function (req, res) {
+    var recordDisplay = [];
+    if(req.query.q != undefined){
+        console.log("Query: " + req.query.q)
+
+        var params = {screen_name: req.query.q};
+          client.get('statuses/user_timeline', params, function(error, tweets, response){
+            if (!error) {
+              // console.log(tweets[0]);
+
+              for(var i=0; i<tweets.length; i++){
+          recordDisplay.push({
+            id: tweets[i].id, 
+            created_at: tweets[i].created_at, 
+            text: tweets[i].text, 
+            name: tweets[i].user.name, 
+            url: tweets[i].user.url, 
+            profile_image_url: tweets[i].user.profile_image_url 
+          });
+        }
+        
+        res.writeHead(200, {
+            'content-type': 'text/json'
+        });
+        res.write(JSON.stringify(recordDisplay))
+        res.end('\n');
+
+            }
+          });      
+
+    }else{
+        console.log('nope')
+        res.writeHead(200, {
+            'content-type': 'text/json'
+        });
+        res.write("no query sent")
+        res.end('\n')
+    }
+});
+
+
+
+
+/*
+var params = {screen_name: 'nodejs'};
+client.get('statuses/user_timeline', params, function(error, tweets, response){
+  if (!error) {
+    console.log(tweets);
+  }
+});
+*/
