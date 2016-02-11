@@ -36,7 +36,7 @@ app.get('/', function (req, res) {
         console.log("Query: " + req.query.q)
 
         client.get('search/tweets', {q: req.query.q}, function(error, tweets, response){
-        if(tweets.length > 0){
+        // if(tweets.length > 0){
           if(tweets.statuses.length > 0){
 
             for(var i=0; i<tweets.statuses.length; i++){
@@ -49,7 +49,7 @@ app.get('/', function (req, res) {
                 profile_image_url: tweets.statuses[i].user.profile_image_url
               });
             }
-          }
+          // }
         }
         
         res.writeHead(200, {
